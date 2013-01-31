@@ -1,5 +1,7 @@
 package EventEmitter::Promise;
 
+use EventEmitter;
+
 use 5.006000;
 use strict;
 use warnings;
@@ -16,9 +18,7 @@ sub new
 
 	my $self;
 
-	bless \$self, $class;
-
-	return $self;
+	return bless \$self, $class;
 }
 
 sub resolve
@@ -26,18 +26,24 @@ sub resolve
 	my ($self, @params) = @_;
 
 	$self->emit('resolved', @params);
+
+	$self->DESTROY;
 }
 
 sub reject
 {
 	my ($self, @params) = @_;
 
-	if ($self->listeners('error')) {
+	my @listeners = $self->listeners('error');
+
+	if (@listeners) {
 		$self->emit('error', @params);
 	}
 	else {
 		die @params;
 	}
+
+	$self->DESTROY;
 }
 
 sub then

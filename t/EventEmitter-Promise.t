@@ -8,10 +8,32 @@
 use strict;
 use warnings;
 
-use Test;
-BEGIN { plan tests => 1 };
+use Test::More;
+BEGIN { plan tests => 3 };
 use EventEmitter::Promise;
 ok(1); # If we made it this far, we're ok.
+
+{
+my $promise = EventEmitter::Promise->new;
+
+my $ok;
+
+$promise->then(sub { $ok = $_[0] });
+$promise->resolve('ok');
+
+is($ok, 'ok', 'resolve->then');
+}
+
+{
+my $promise = EventEmitter::Promise->new;
+
+my $ok;
+
+$promise->then(sub {}, sub { $ok = $_[0] });
+$promise->reject('ok');
+
+is($ok, 'ok', 'reject->then');
+}
 
 #########################
 
