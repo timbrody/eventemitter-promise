@@ -67,7 +67,7 @@ EventEmitter::Promise - promises for events
   use EventEmitter::Promise;
 
   my $promise = EventEmitter::Promise->new;
-  asyncfunction(sub {
+  &asyncfunction(sub {
 	  my ($val) = @_;
 	  $promise.resolve($val);
   });
@@ -80,6 +80,21 @@ EventEmitter::Promise - promises for events
   });
 
 =head1 DESCRIPTION
+
+From node-promise:
+
+	Promises provide a clean separation of concerns between asynchronous
+	behavior and the interface so asynchronous functions can be called without
+	callbacks, and callback interaction can be done on the generic promise
+	interface.
+
+The practical outcome is that code dealing with the result of an asynchronous
+function can be defined in the source after the call to that function. This has
+a two-fold benefit 1) the code is laid in its logical order and 2) the hell
+of callbacks-within-callbacks can be unwrapped.
+
+This module aims to be a minimalist implementation of promises, based on the
+node-promise API.
 
 =head1 METHODS
 
@@ -104,6 +119,8 @@ When the promise is fulfilled call $callback, otherwise on error call $err_callb
 =back
 
 =head1 SEE ALSO
+
+https://github.com/kriszyp/node-promise
 
 =head1 AUTHOR
 

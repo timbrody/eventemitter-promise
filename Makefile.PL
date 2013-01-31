@@ -5,8 +5,11 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'EventEmitter::Promise',
     VERSION_FROM      => 'lib/EventEmitter/Promise.pm', # finds $VERSION
-    PREREQ_PM         => {'Test'        =>  0, }, # e.g., Module::Name => 1.1
+    PREREQ_PM         => {
+		'Test::More'        =>  0,
+		'EventEmitter'      =>  0,
+	}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/EventEmitter/Promise.pm', # retrieve abstract from module
-       AUTHOR         => 'A. U. Thor <tdb2@>') : ()),
+       AUTHOR         => 'Tim Brody <tdb2@ecs.soton.ac.uk>') : ()),
 );

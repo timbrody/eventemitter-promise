@@ -1,16 +1,20 @@
-EventEmitter-Promise version 0.01
-=================================
+EventEmitter-Promise
+====================
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+From node-promise:
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+	Promises provide a clean separation of concerns between asynchronous
+	behavior and the interface so asynchronous functions can be called without
+	callbacks, and callback interaction can be done on the generic promise
+	interface.
+
+The practical outcome is that code dealing with the result of an asynchronous
+function can be defined in the source after the call to that function. This has
+a two-fold benefit 1) the code is laid in its logical order and 2) the hell
+of callbacks-within-callbacks can be unwrapped.
+
+This module aims to be a minimalist implementation of promises, based on the
+node-promise API.
 
 INSTALLATION
 
@@ -25,16 +29,14 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  Test
+  Test::More
+  EventEmitter
 
 COPYRIGHT AND LICENCE
 
-Put the correct copyright and licence information here.
-
-Copyright (C) 2013 by A. U. Thor
+Copyright (C) 2013 by Tim Brody
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.14.2 or,
 at your option, any later version of Perl 5 you may have available.
-
 
