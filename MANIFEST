@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/EventEmitter-Promise.t
+lib/EventEmitter/Promise.pm
