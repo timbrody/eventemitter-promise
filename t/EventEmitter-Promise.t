@@ -9,8 +9,8 @@ use strict;
 use warnings;
 
 use Test::More;
-BEGIN { plan tests => 3 };
-use EventEmitter::Promise;
+BEGIN { plan tests => 4 };
+use EventEmitter::Promise qw( all );
 ok(1); # If we made it this far, we're ok.
 
 {
@@ -33,6 +33,24 @@ $promise->then(sub {}, sub { $ok = $_[0] });
 $promise->reject('ok');
 
 is($ok, 'ok', 'reject->then');
+}
+
+{
+my $ok;
+
+my $p1 = EventEmitter::Promise->new;
+my $p2 = EventEmitter::Promise->new;
+my $p3 = EventEmitter::Promise->new;
+
+my $promise = all($p1, $p2, $p3);
+
+$promise->then(sub { $ok = $_[1][0] }, sub {});
+
+$p1->resolve('first');
+$p2->resolve('second');
+$p3->resolve('third');
+
+is($ok, 'second', 'all->resolve');
 }
 
 #########################

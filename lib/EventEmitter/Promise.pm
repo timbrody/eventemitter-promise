@@ -1,14 +1,19 @@
 package EventEmitter::Promise;
 
 use EventEmitter;
+use Exporter;
 
 use 5.006000;
 use strict;
 use warnings;
 
-our @ISA = qw(EventEmitter);
+our @ISA = qw(EventEmitter Exporter);
 
 our $VERSION = '0.01';
+
+our @EXPORT_OK = qw( all );
+our %EXPORT_TAGS;
+our @EXPORT;
 
 # Preloaded methods go here.
 
@@ -54,6 +59,32 @@ sub then
 	$self->on('error', $on_error) if defined $on_error;
 }
 
+sub all
+{
+	my @promises = @_;
+
+	my $promise = __PACKAGE__->new;
+
+	my %results;
+
+	for(@promises) {
+		my $key = "$_";
+		$_->then(sub {
+			my @params = @_;
+			$results{$key} = \@params;
+			if (keys %results == @promises) {
+				$promise->resolve(map { $results{$_} } @promises);
+			}
+		}, sub {
+			my @params = @_;
+			$_->DESTROY for @promises;
+			$promise->reject(@params);
+		});
+	}
+
+	return $promise;
+}
+
 1;
 __END__
 # Below is stub documentation for your module. You'd better edit it!
@@ -64,7 +95,7 @@ EventEmitter::Promise - promises for events
 
 =head1 SYNOPSIS
 
-  use EventEmitter::Promise;
+  use EventEmitter::Promise qw( all );
 
   my $promise = EventEmitter::Promise->new;
   &asyncfunction(sub {
@@ -78,6 +109,14 @@ EventEmitter::Promise - promises for events
 	  my ($err) = @_;
 	  die $err;
   });
+	 my $promise = all($promise1, $promise2);
+	 $promise->then(sub {
+		 my ($params1, $params2) = @_;
+		 my ($val) = @$params1;
+		 print "Got value: $val\n";
+	 }, sub {
+		 die $_[0];
+	 });
 
 =head1 DESCRIPTION
 
@@ -103,6 +142,14 @@ node-promise API.
 =item $promise = EventEmitter::Promise->new;
 
 Returns a new promise object.
+
+=item $promise = EventEmitter::Promise::all($promise [, $promise ...])
+
+Creates a new promise that will be resolved only when all of the promises passed to it are.
+
+The parameters from each resolved promise will be passed as an array reference.
+
+If any child promise is rejected the promise will immediately be rejected.
 
 =item $promise->resolve(@params)
 
